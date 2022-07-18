@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 class MovieController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the movies.
      *
      * @return array
      */
@@ -23,7 +23,20 @@ class MovieController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Display the specified movie.
+     *
+     * @param  \App\Models\Movie  $movie
+     * @return array
+     */
+    public function show(Movie $movie)
+    {
+        return [
+            'data' => $movie
+        ];
+    }
+
+    /**
+     * Store a newly created movie in storage.
      *
      * @param  \App\Http\Requests\StoreMovieRequest  $request
      * @return array
@@ -42,7 +55,7 @@ class MovieController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified movie in storage.
      *
      * @param  \App\Http\Requests\UpdateMovieRequest  $request
      * @param  \App\Models\Movie  $movie
@@ -62,7 +75,7 @@ class MovieController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified movie from storage.
      *
      * @param  \App\Models\Movie  $movie
      * @return array

@@ -21,4 +21,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::group(['prefix' => 'v1'], function() {
     Route::get('movies', [MovieController::class, 'index']);
+    Route::post('movies', [MovieController::class, 'store']);
+    Route::post('movies/{movie:id}', [MovieController::class, 'update']);
+    Route::delete('movies/{movie:id}', [MovieController::class, 'destroy']);
 });

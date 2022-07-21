@@ -32,10 +32,10 @@ Route::prefix('v1')->group(function() {
         Route::post('login', 'login');
     });
 
-    /**
-     * Logout Routes
-     */
     Route::middleware('auth:sanctum')->group(function() {
+        /**
+         * Logout Routes
+         */
         Route::controller(AuthController::class)
         ->group(function() {
             Route::post('logout', 'logout');

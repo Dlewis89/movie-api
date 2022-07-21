@@ -28,7 +28,7 @@ Route::controller(MovieController::class)
         Route::get('', 'index');
         Route::get('{movie:id}', 'show');
         Route::post('', 'store');
-        Route::post('{movie:id}','update');
+        Route::patch('{movie:id}','update');
         Route::delete('{movie:id}', 'destroy');
     }
 );

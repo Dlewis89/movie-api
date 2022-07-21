@@ -15,32 +15,43 @@ use App\Http\Controllers\MovieController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::post('v1/register', [AuthController::class, 'register']);
-Route::post('v1/login', [AuthController::class, 'login']);
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::controller(AuthController::class)
-    ->prefix('v1')
-    ->middleware('auth:sanctum')
-    ->group(function () {
-        Route::post('logout', 'logout');
-    }
-);
+Route::prefix('v1')->group(function() {
 
-/**
- * Movie Routes
- */
-Route::controller(MovieController::class)
-    ->prefix('v1/movies')
-    ->middleware('auth:sanctum')
+    /**
+     * Register & Login Routes
+     */
+    Route::controller(AuthController::class)
     ->group(function() {
-        Route::get('', 'index');
-        Route::get('{movie:id}', 'show');
-        Route::post('', 'store');
-        Route::patch('{movie:id}','update');
-        Route::delete('{movie:id}', 'destroy');
-    }
-);
+        Route::post('register', 'register');
+        Route::post('login', 'login');
+    });
+
+    /**
+     * Logout Routes
+     */
+    Route::middleware('auth:sanctum')->group(function() {
+        Route::controller(AuthController::class)
+        ->group(function() {
+            Route::post('logout', 'logout');
+        });
+
+        /**
+         * Movie Routes
+         */
+        Route::controller(MovieController::class)
+        ->prefix('movies')
+        ->group(function() {
+            Route::get('', 'index');
+            Route::get('{movie:id}', 'show');
+            Route::post('', 'store');
+            Route::patch('{movie:id}','update');
+            Route::delete('{movie:id}', 'destroy');
+        });
+    });
+});

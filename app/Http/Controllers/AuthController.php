@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoginUserRequest;
+use App\Http\Requests\StoreUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -10,16 +12,12 @@ use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller
 {
     /**
-     * @param \Illuminate\Http\Request $request
+     * @param \App\Http\Requests\StoreUserRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function register(Request $request): JsonResponse
+    public function register(StoreUserRequest $request): JsonResponse
     {
-        $fields = $request->validate([
-            'name' => 'required|string',
-            'email'=> 'required|string|unique:users,email',
-            'password' => 'required|confirmed'
-        ]);
+        $fields = $request->validated();
 
         $user = User::create([
             'name' => $fields['name'],
@@ -38,15 +36,12 @@ class AuthController extends Controller
     }
 
     /**
-     * @param \Illuminate\Http\Request $request
+     * @param \App\Http\Requests\LoginUserRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login(Request $request): JsonResponse
+    public function login(LoginUserRequest $request): JsonResponse
     {
-        $fields = $request->validate([
-            'email'=> 'required|string',
-            'password' => 'required'
-        ]);
+        $fields = $request->validated();
 
         // Check email
         $user = User::where('email', $fields['email'])->first();

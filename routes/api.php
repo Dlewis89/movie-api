@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\MovieController;
 
 /*
@@ -14,16 +15,27 @@ use App\Http\Controllers\MovieController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::post('v1/register', [AuthController::class, 'register']);
+Route::post('v1/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::controller(AuthController::class)
+    ->prefix('v1')
+    ->middleware('auth:sanctum')
+    ->group(function () {
+        Route::post('logout', 'logout');
+    }
+);
 
 /**
  * Movie Routes
  */
 Route::controller(MovieController::class)
     ->prefix('v1/movies')
+    ->middleware('auth:sanctum')
     ->group(function() {
         Route::get('', 'index');
         Route::get('{movie:id}', 'show');

@@ -87,7 +87,6 @@ class MovieController extends Controller
         } catch(Exception $e) {
             return response()->json('Something went wrong', 500);
         }
-
     }
 
     /**

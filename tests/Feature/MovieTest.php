@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Movie;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -27,6 +28,7 @@ class MovieTest extends TestCase
     {
         parent::setUp();
         $this->db_movie = Movie::create($this->movie);
+        $this->user = User::factory()->create();
     }
 
     /**
@@ -36,27 +38,31 @@ class MovieTest extends TestCase
      */
     public function test_get_movies(): void
     {
-        $response = $this->getJson('api/v1/movies')
+        $response = $this->actingAs($this->user)
+            ->getJson('api/v1/movies')
             ->assertStatus(200);
         $this->assertJson($response->getContent());
     }
 
     public function test_get_a_movie(): void {
-        $response = $this->getJson('api/v1/movies/1')
+        $response = $this->actingAs($this->user)
+            ->getJson('api/v1/movies/1')
             ->assertStatus(200);
         $this->assertJson($response->getContent());
     }
 
     public function test_add_a_new_movie(): void
     {
-        $this->post('api/v1/movies', $this->newMovie)
+        $this->actingAs($this->user)
+            ->post('api/v1/movies', $this->newMovie)
             ->assertStatus(201);
         $this->assertDatabaseHas('movies', $this->newMovie);
     }
 
     public function test_update_a_movie(): void
     {
-        $this->patch('api/v1/movies/'. $this->db_movie->id, [
+        $this->actingAs($this->user)
+            ->patch('api/v1/movies/'. $this->db_movie->id, [
             'name' => 'Insidious Chapter 2'
         ])->assertStatus(200);
 
@@ -67,7 +73,8 @@ class MovieTest extends TestCase
 
     public function test_delete_a_movie(): void
     {
-        $this->delete('api/v1/movies/'. $this->db_movie->id)
+        $this->actingAs($this->user)
+            ->delete('api/v1/movies/'. $this->db_movie->id)
             ->assertStatus(200);
 
         $this->assertDatabaseMissing('movies', [

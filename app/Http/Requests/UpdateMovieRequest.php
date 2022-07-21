@@ -25,9 +25,9 @@ class UpdateMovieRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'string|required',
-            'release_year' => 'integer|min:1900|required|max:' . date("Y"),
-            'rating' => [Rule::in(['G', 'PG', 'PG-13', 'R']), 'required']
+            'name' => 'string|sometimes',
+            'release_year' => 'integer|min:1900|sometimes|max:' . date("Y"),
+            'rating' => [Rule::in(['G', 'PG', 'PG-13', 'R']), 'sometimes']
         ];
     }
 }
